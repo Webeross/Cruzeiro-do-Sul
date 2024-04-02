@@ -2,27 +2,37 @@
 // UNICSUL - Universidade Cruzeiro do Sul - Santo Amaro
 // Curso: CTS Analise Desenvolvimento de Sistemas
 // Disciplina: Topicos Avançados de SI - I
-// Autor: Eduardo Weber Dias  -   Data: 25/03/2024
-// Descrição: ProjAula
+// Autor: Eduardo Weber Dias  -   Data: 01/04/2024
+// Descrição: Cálculos de IMC, Média e Taxa dólar
 // *****************
 
 // Importando os modulos:
 const http = require('http');       
-const url  = require('url');        
+const url  = require('url');
+const fs = require('fs'); 
 
 // Definição de variaveis 
-const PORT = 4800;
+const PORT = 5678;
 
 // Criação do Servidor:
-const server = http.createServer((req, res) => { 
+const server = http.createServer((req, res) => {
     // Utilização do modulo URL 
     const reqUrl = url.parse(req.url, true);  
     const path   = reqUrl.pathname;           
     const query  = reqUrl.query;              
 
     if(path === '/'){
-        res.writeHead(200, {'Context-Type':'text/plain; charset=utf-8'});
-        res.end("End-Point: INDEX ('/')");
+        if (path === '/') {
+            fs.readFile('dudu.html', 'utf-8', (err, data) => {
+                if (err) {
+                    res.writeHead(500, {"Content-Type": "text/plain; charset=utf-8"});
+                    res.end('500 - Erro interno do servidor');
+                } else {
+                    res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+                    res.end(data);
+                }
+            });
+          }        
     }else if(path === '/imc'){
         const valorPeso   = parseFloat(query.peso);
         const valorAltura = parseFloat(query.altura);
